@@ -1,21 +1,21 @@
 const User = require('../models/user.model');
 exports.findUsers = async (req, res) => {
     try {
-        const users = await User.findAll({
+        const user = await User.findAll({
             where: {
-                status: true,
+                status: 'available',
             }
         })
         return res.status(200).json({
-            results: users.length,
+            results: user.length,
             status: "success",
-            message: "Users found",
-            users
+            message: "User found",
+            user
         })
     } catch (error) {
         return res.status(500).json({
             status: '404 Not Found',
-            message: "Error finding users"
+            message: "Error finding user"
         })
     }
 }
@@ -24,18 +24,6 @@ exports.createUser = async (req, res) => {
     try {
         const { name, email, password, role } = req.body
         
-        const validationEmail = await User.findOne({
-            where: {
-                email
-            }
-        })
-        if (validationEmail) {
-            return res.json({
-                status: "Emails replicated",
-                message: "Email found"
-            })
-        }
-
         const user = await User.create({
             name,
             email,
